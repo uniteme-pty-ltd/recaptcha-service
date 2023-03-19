@@ -5,7 +5,7 @@ use super::*;
 #[derive(Deserialize, Debug)]
 pub struct Request {
     pub secret: String,
-    pub hostname: String,
+    pub hostname: Option<String>,
     pub token: String,
     pub ip: Option<String>,
 }
@@ -70,7 +70,9 @@ pub async fn route(req: web::Json<Request>) -> Result<impl Responder, impl Respo
             Err(ErrorCode::BadRequest)
         }
         true => {
-            if remote.hostname.is_some() && remote.hostname.unwrap() != req.hostname {
+            if req.hostname.is_some()
+                && (remote.hostname.is_none() || remote.hostname.unwrap() != req.hostname.unwrap())
+            {
                 return Err(ErrorCode::Unauthorised);
             }
 
