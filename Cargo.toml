@@ -1,0 +1,27 @@
+[package]
+name = "recaptcha-service"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+actix-web = "4"
+serde = { version = "1", features = ["derive"] }
+env_logger = "0.10.0"
+num_cpus = "1"
+derive_more = "0.99.17"
+reqwest = { version = "0.11.14", features = ["json"] }
+
+[lib]
+name = "recaptcha_client"
+path = "src/client/lib.rs"
+
+[[bin]]
+name = "recaptcha_service"
+path = "src/service/main.rs"
+
+[profile.release]
+strip = true
+lto = true
+codegen-units = 1
