@@ -8,6 +8,7 @@ edition = "2021"
 [dependencies]
 actix-web = "4"
 serde = { version = "1", features = ["derive"] }
+time = { version = "0.3.17", features = ["serde-human-readable"] }
 env_logger = "0.10.0"
 num_cpus = "1"
 derive_more = "0.99.17"

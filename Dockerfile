@@ -51,9 +51,9 @@ COPY --from=build /lib/*-linux-gnu/libcom_err.so* /lib/
 COPY --from=build /lib/*-linux-gnu/libkeyutils.so* /lib/
 
 # Extract compiled binary and environment variables
-COPY --from=build /app/target/*/user_service /user_service
+COPY --from=build /app/target/*/recaptcha_service /recaptcha_service
 
 # Exponse the running port
 EXPOSE 80
 
-ENTRYPOINT ["/user_service"]
+ENTRYPOINT ["/recaptcha_service"]
