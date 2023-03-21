@@ -30,7 +30,7 @@ struct RemoteResponse {
     score: Option<f32>,
     action: Option<String>,
     #[serde(rename(deserialize = "challenge_ts"))]
-    timestamp: Option<time::PrimitiveDateTime>,
+    timestamp: Option<String>,
     hostname: Option<String>,
     #[serde(rename(deserialize = "error-codes"))]
     errors: Option<Vec<String>>,
@@ -40,9 +40,7 @@ struct RemoteResponse {
 pub async fn route(req: web::Json<Request>) -> Result<impl Responder, impl ResponseError> {
     let req = req.into_inner();
 
-    let client = reqwest::Client::new();
-
-    let remote = client
+    let remote = reqwest::Client::new()
         .post("https://www.google.com/recaptcha/api/siteverify")
         .form(&RemoteRequest {
             secret: req.secret,
@@ -70,16 +68,22 @@ pub async fn route(req: web::Json<Request>) -> Result<impl Responder, impl Respo
             Err(ErrorCode::BadRequest)
         }
         true => {
-            if req.hostname.is_some()
-                && (remote.hostname.is_none() || remote.hostname.unwrap() != req.hostname.unwrap())
-            {
-                return Err(ErrorCode::Unauthorised);
-            }
+            //// Check if hostname matches - CURRENTLY BUGGED
+            // if req.hostname.is_some()
+            //     && (remote.hostname.is_none() || remote.hostname.unwrap() != req.hostname.unwrap())
+            // {
+            //     return Err(ErrorCode::Unauthorised);
+            // }
+
+            let time_format =
+                time::format_description::parse("[year]-[month]-[day]T[hour]:[minute]:[second]Z")
+                    .unwrap();
 
             Ok(web::Json(Response {
                 score: remote.score.unwrap(),
                 action: remote.action.unwrap(),
-                timestamp: remote.timestamp.unwrap(),
+                timestamp: time::PrimitiveDateTime::parse(&remote.timestamp.unwrap(), &time_format)
+                    .unwrap(),
             }))
         }
     }
