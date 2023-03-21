@@ -9,11 +9,11 @@ pub struct Client {
     host: String,
     secret: String,
     // The hostname of the domain that the recaptcha should've been completed from
-    hostname: String,
+    hostname: Option<String>,
 }
 
 impl Client {
-    pub fn new(host: String, secret: String, hostname: String) -> Client {
+    pub fn new(host: String, secret: String, hostname: Option<String>) -> Client {
         Client {
             host,
             secret,

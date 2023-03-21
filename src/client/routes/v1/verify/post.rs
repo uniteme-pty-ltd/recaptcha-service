@@ -1,9 +1,9 @@
 use super::*;
 
 #[derive(Serialize)]
-pub struct Request {
-    secret: String,
-    hostname: Option<String>,
+pub struct Request<'a> {
+    secret: &'a String,
+    hostname: &'a Option<String>,
     token: String,
     ip: Option<String>,
 }
@@ -19,16 +19,14 @@ impl Client {
     // Returns ID of created user
     pub async fn verify(
         &self,
-        secret: String,
-        hostname: Option<String>,
         token: String,
         ip: Option<String>,
     ) -> Result<Option<Response>, Box<dyn std::error::Error>> {
         let res = req()
             .post(self.endpoint("/v1/verify", vec![]))
             .json(&Request {
-                secret,
-                hostname,
+                secret: &self.secret,
+                hostname: &self.hostname,
                 token,
                 ip,
             })
