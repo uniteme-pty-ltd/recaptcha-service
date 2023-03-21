@@ -6,7 +6,15 @@ pub fn client() -> Client {
         .parse::<u16>()
         .expect("Environment variable \"PORT\" must be of type u16");
 
+    let secret = std::env::var("RECAPTCHA_SECRET")
+        .expect("Envrionment variable \"RECAPTCHA_SECRET\" not set");
+
+    let client_host = match std::env::var("CLIENT_HOST") {
+        Err(_) => None,
+        Ok(host) => Some(host),
+    };
+
     let host: String = format!("http://127.0.0.1:{}", port);
 
-    Client::new(host)
+    Client::new(host, secret, client_host)
 }
