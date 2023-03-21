@@ -5,12 +5,20 @@ pub mod routes;
 
 #[derive(Clone)]
 pub struct Client {
+    // The host of the recaptcha_service
     host: String,
+    secret: String,
+    // The hostname of the domain that the recaptcha should've been completed from
+    hostname: String,
 }
 
 impl Client {
-    pub fn new(host: String) -> Client {
-        Client { host: host }
+    pub fn new(host: String, secret: String, hostname: String) -> Client {
+        Client {
+            host,
+            secret,
+            hostname,
+        }
     }
 
     fn endpoint(&self, url: &str, values: Vec<String>) -> String {
