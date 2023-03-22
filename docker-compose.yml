@@ -3,6 +3,11 @@ version: '3.9'
 name: recaptcha-service
 
 services:
+
+  #####################
+  # RECAPTCHA SERVICE #
+  #####################
+  
   api:
     container_name: recaptcha-service-api
     build:
