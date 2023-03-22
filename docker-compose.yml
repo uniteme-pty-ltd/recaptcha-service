@@ -5,7 +5,6 @@ name: recaptcha-service
 services:
   api:
     container_name: recaptcha-service-api
-    restart: always
     build:
       context: .
       dockerfile: Dockerfile
@@ -13,12 +12,6 @@ services:
         PROFILE: dev # Faster build times for local develpment, this will be automatically changed to release if omitted
     ports:
       - "127.0.0.1:0:80"
-    networks:
-      - nw
 
 volumes:
   db-data:
-
-networks:
-  nw:
-    name: "nw"
