@@ -1,3 +1,5 @@
+use core::panic;
+
 use super::*;
 
 // Documentation: https://developers.google.com/recaptcha/docs/verify
@@ -40,6 +42,21 @@ struct RemoteResponse {
 pub async fn route(req: web::Json<Request>) -> Result<impl Responder, impl ResponseError> {
     let req = req.into_inner();
 
+    let time_format =
+                time::format_description::parse("[year]-[month]-[day]T[hour]:[minute]:[second]Z")
+                    .unwrap();
+
+    // Return early if we should always return true
+    if let Ok(value) = std::env::var("ALWAYS_TRUE") {
+        if value == "true" {
+            return Ok(web::Json(Response {
+                score: 1.0,
+                action: "always_true".to_string(),
+                timestamp: time::PrimitiveDateTime::parse(&time::OffsetDateTime::now_utc().format(&time_format).unwrap(), &time_format).unwrap(),
+            }));
+        }
+    }
+
     let remote = reqwest::Client::new()
         .post("https://www.google.com/recaptcha/api/siteverify")
         .form(&RemoteRequest {
@@ -74,10 +91,6 @@ pub async fn route(req: web::Json<Request>) -> Result<impl Responder, impl Respo
             // {
             //     return Err(ErrorCode::Unauthorised);
             // }
-
-            let time_format =
-                time::format_description::parse("[year]-[month]-[day]T[hour]:[minute]:[second]Z")
-                    .unwrap();
 
             Ok(web::Json(Response {
                 score: remote.score.unwrap(),

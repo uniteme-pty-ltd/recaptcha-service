@@ -15,6 +15,9 @@ services:
       dockerfile: Dockerfile
       args:
         PROFILE: dev # Faster build times for local develpment, this will be automatically changed to release if omitted
+    environment:
+      ALWAYS_TRUE: ${RECAPTCHA_ALWAYS_TRUE:-true}
+
     ports:
       - "127.0.0.1:0:80"
 
