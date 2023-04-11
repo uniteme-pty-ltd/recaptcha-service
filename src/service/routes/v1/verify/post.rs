@@ -1,5 +1,3 @@
-use core::panic;
-
 use super::*;
 
 // Documentation: https://developers.google.com/recaptcha/docs/verify
