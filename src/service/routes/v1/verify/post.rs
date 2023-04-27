@@ -41,8 +41,7 @@ pub async fn route(req: web::Json<Request>) -> Result<impl Responder, impl Respo
     let req = req.into_inner();
 
     let time_format =
-                time::format_description::parse("[year]-[month]-[day]T[hour]:[minute]:[second]Z")
-                    .unwrap();
+        time::format_description::parse("[year]-[month]-[day]T[hour]:[minute]:[second]Z").unwrap();
 
     // Return early if we should always return true
     if let Ok(value) = std::env::var("ALWAYS_TRUE") {
@@ -50,7 +49,13 @@ pub async fn route(req: web::Json<Request>) -> Result<impl Responder, impl Respo
             return Ok(web::Json(Response {
                 score: 1.0,
                 action: "always_true".to_string(),
-                timestamp: time::PrimitiveDateTime::parse(&time::OffsetDateTime::now_utc().format(&time_format).unwrap(), &time_format).unwrap(),
+                timestamp: time::PrimitiveDateTime::parse(
+                    &time::OffsetDateTime::now_utc()
+                        .format(&time_format)
+                        .unwrap(),
+                    &time_format,
+                )
+                .unwrap(),
             }));
         }
     }

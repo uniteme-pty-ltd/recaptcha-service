@@ -1,6 +1,7 @@
 use actix_web::{http::StatusCode, post, web, HttpResponse, Responder, ResponseError, Scope};
 use serde::{Deserialize, Serialize};
 
+pub mod get;
 pub mod v1;
 
 // Essential enum that can tell actix what to generate for a standard error_response.
