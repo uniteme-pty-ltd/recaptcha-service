@@ -4,6 +4,26 @@ name: recaptcha-service
 
 services:
 
+  #################
+  # REVERSE PROXY #
+  #################
+  
+  reverse-proxy:
+    container_name: recaptcha-service-reverse-proxy
+    build:
+      context: ../reverse-proxy
+      dockerfile: Dockerfile
+      args:
+        PROFILE: dev # Faster build times for local develpment, this will be automatically changed to release if omitted
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      USE_SELF_SIGNED: "true"
+      DOMAIN_MAPS: localhost:recaptcha-service-api
+    links:
+    - "api:recaptcha-service-api"
+
   #####################
   # RECAPTCHA SERVICE #
   #####################
@@ -17,7 +37,6 @@ services:
         PROFILE: dev # Faster build times for local develpment, this will be automatically changed to release if omitted
     environment:
       ALWAYS_TRUE: ${RECAPTCHA_ALWAYS_TRUE:-true}
-
     ports:
       - "127.0.0.1:0:80"
 
