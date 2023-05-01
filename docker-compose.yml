@@ -4,9 +4,9 @@ name: recaptcha-service
 
 services:
 
-  #################
-  # REVERSE PROXY #
-  #################
+  ########################
+  # REVERSE PROXY: 0.1.0 #
+  ########################
   
   reverse-proxy:
     container_name: recaptcha-service-reverse-proxy
