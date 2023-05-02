@@ -1,6 +1,6 @@
 use actix_web::{get, HttpResponse, Responder};
 
-#[get("/")]
+#[get("/health")]
 pub async fn route() -> impl Responder {
     HttpResponse::Ok()
 }
