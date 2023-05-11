@@ -9,7 +9,7 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(move || App::new().service(v1::service()).service(get::route))
         .workers(num_cpus::get())
-        .bind(("0.0.0.0", 80))?
+        .bind(("0.0.0.0", std::env::var("PORT").expect("PORT not set").parse().expect("PORT was not u16")))?
         .run()
         .await
 }
